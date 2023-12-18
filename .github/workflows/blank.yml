@@ -1,0 +1,310 @@
+import random
+flashlight = ""
+list3 = [1, 2, 3]
+list5 = [1, 2, 3, 4, 5]
+list10 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+list35 = [3, 4, 5]
+list510 = [5, 6, 7, 8, 9, 10]
+list2 = [1,2]
+action = ""
+###############################################################################################################
+###############################################################################################################
+###############################################################################################################
+class pllayout(object):
+    def __init__(self, name, health, inventory, gold, status, shop_keep, mayor_count):
+        self.name = name
+        self.health = health
+        self.inventory = inventory
+        self.gold = gold
+        self.status = status
+        self.shop_keep = shop_keep
+        self.mayor_count = mayor_count
+###############################################################################################################
+    def shopkeeper_talk(player):
+        inspected_item = ""
+        if player.shop_keep == 0:
+            print("Hey", player.name + ". I would ask if you've seen the darkness, but\n I think you already have, it is a bit hard to miss. Once\n I get a little more information about this, I might open up\n my shop again. I guess I could use this situation to sell some stuff.")
+            print("")
+            print("You laugh along with her, politely excuse yourself, and walk away")
+        elif player.shop_keep >= 1:
+            print("Hey",player.name + ". Feel free to purchase something. Sorry, \nbut I unfortunately can't give you a friends discount.")
+            while not((inspected_item.lower() == "spear") or (inspected_item.lower() == "dagger") or (inspected_item.lower() == "slingshot") or (inspected_item.lower() == "bandage") or (inspected_item.lower() == "painkiller")):
+                inspected_item = input("Select an item to examine. (Spear / Dagger / Slingshot / Bandage / Painkiller / LEAVE)")
+        return
+###############################################################################################################
+    def mayor_talk(player):
+        if player.mayor_count == 0:
+            print("You walk up to the mayor and introduce yourself")
+            print("")
+            print("Oh why hello",player.name + ". Have you seen this mess? The lights have completely gone out.\n I've heard that our most important light source has been stolen. Our\n light mostly comes from one of our most sacred jewels,\n However it's gone now. Rumors say that the jewel ended up inside\n of a nearby dungeon. However, the dungeon is very dangerous, and\n we likely can't send anyone down there to inspect the dungeon. \n We may not have any light for a long while...")
+            print("")
+            print("You thank the Mayor for the information, and walk away.")
+        elif player.mayor_count >= 1:
+            print("Hey",player.name + ". This situation is getting very dire. Our emergency team is still hesitant to enter the dungeon.\n I've been exploring the area to try and get more information, but all I find are\n wild rodents and some weapons people dropped while running scared...")
+            print("")
+            print("You thank the Mayor for the information, and walk away")
+        return
+###############################################################################################################
+    def exploration(player):
+        print("You wander through the woods, looking for anything of value.")
+        if random.choice(list5) == 5:
+            print("You find a pouch filled with 8 gold.")
+            print("You Gained 8 Gold!")
+            player.gold += 8
+        elif random.choice(list5) >= 2:
+            randomness = random.choice(list5)
+            print("You find loose change, adding up to",randomness,"gold.")
+            print("You Gained",randomness,"Gold!")
+            player.gold += randomness
+        else:
+            print("While wandering through the woods, a wild rat\n notices you, and bites you in the leg")
+            randomness = random.choice(list5) + random.choice(list5) + 2
+            print("You take",randomness,"damage.")
+            player.health -= randomness
+            if player.health <= 0:
+                print("With the last bit of your life drained out of your body, you fall\n to the ground in pain. The world slowly fades to black.")
+                print("")
+                print("Game Over")
+                return
+        return
+###############################################################################################################
+    def dungeon(player):
+        print("")
+        print("You decide to enter the dungeon which contains the shining jewel.\nYou walk down a staircase made of stone.\nNo turning back now.")
+        print("")
+        enemy_defeated = "no"
+        using_light = "filler"
+        enemy_defeated = "no"
+        if "Flashlight" in player.inventory:
+            while not ((using_light.lower() == "no") or (using_light.lower() == "yes")):
+                using_light = input("You hear a strange sound, do you use your Flashlight? (Yes / No)")
+            using_light = using_light.lower()
+            if using_light == "yes":
+                print("")
+                if level == 1:
+                    print("You turn on your light and see a humanoid pig standing across from you.\nIt stands on it's hind legs and wields a wooden bat.\nYou place the flashlight on the ground, allowing you to always see the pig.")    
+        enemy_health = 300
+        while enemy_defeated == "no":
+            decision = ""
+            possible_attacks = ["fist"]
+            if using_light == "yes":
+                while not ((decision.lower() == "attack") or (decision.lower() == "inventory")):
+                    decision = input("You see the beast approaching. What do you do? (Inventory / Attack)")
+            elif using_light == "no":
+                while not ((decision.lower() == "attack") or (decision.lower() == "inventory")):
+                    decision = input("You hear a wild beast approaching. What do you do? (Inventory / Attack)")
+            if decision.lower() == "attack":
+                chancetomiss = random.choice(list5) + random.choice(list2)
+                if ("Spear" in inventory_items) or ("Dagger" in inventory_items) or ("Slingshot" in inventory_items):
+                    possible_attacks = []
+                if ("Spear" in inventory_items):
+                    possible_attacks.append("Spear")
+                if ("Dagger" in inventory_items):
+                    possible_attacks.append("Dagger")
+                if ("Slingshot" in inventory_items):
+                    possible_attacks.append("Slingshot")
+                while not ((decision.lower() == "fist") or (decision.title() in possible_attacks)):
+                    decision = input("What do you attack with? (" + str(possible_attacks) + ")")
+                if decision.lower() == "fist":
+                    damage = random.choice(list5) + random.choice(list10) + random.choice(list2)
+                    print("You attack the beast with your fist, dealing",damage,"damage.")
+                    enemy_health -= damage
+                    if enemy_health <= 0:
+                        print("The beast lets out a loud cry that slowly fades out.")
+                        print("You killed the beast!")
+                        enemy_defeated = "yes"
+                    else:
+                        print("The creature screams out in pain. You hear it lunge forward, attacking you")
+                        damage = random.choice(list5) + random.choice(list5) + random.choice(list3) + 5
+                        if not (chancetomiss == 2):
+                            print("You take",damage,"damage.")
+                            health_number -= damage
+                            if health_number <= 0:
+                                print("With the last bit of your life drained out of your body, you fall\n to the ground in pain. The world slowly fades to black.")
+                                print("")
+                                print("Game Over")
+                                return
+                        else:
+                            print("You manage to dodge the attack. You take no damage")
+                if decision.lower() == "spear":
+                    damage = random.choice(list35) + random.choice(list10) + random.choice(list35) + random.choice(list10) + random.choice(list5) + 5
+                    print("You attack the beast with your spear, dealing",damage,"damage.")
+                    enemy_health -= damage
+                    if enemy_health <= 0:
+                        print("The beast lets out a loud cry that slowly fades out.")
+                        print("You killed the beast!")
+                        enemy_defeated = "yes"
+                    else:
+                        print("The creature screams out in pain. You hear it lunge forward, attacking you")
+                        damage = random.choice(list5) + random.choice(list5) + random.choice(list3) + 5
+                        if not (chancetomiss == 2):
+                            print("You take",damage,"damage.")
+                            health_number -= damage
+                            if health_number <= 0:
+                                print("With the last bit of your life drained out of your body, you fall\n to the ground in pain. The world slowly fades to black.")
+                                print("")
+                                print("Game Over")
+                                return
+                        else:
+                            print("You manage to dodge the attack. You take no damage")
+                if decision.lower() == "dagger":
+                    damage = random.choice(list35) + random.choice(list510) + random.choice(list35) + random.choice(list5) +  7
+                    print("You attack the beast with your dagger, dealing",damage,"damage.") 
+                    enemy_health -= damage
+                    if enemy_health <= 0:
+                        print("The beast lets out a loud cry that slowly fades out.")
+                        print("You killed the beast!")
+                        enemy_defeated = "yes"
+                    else:
+                        print("The creature screams out in pain. You hear it lunge forward, attacking you")
+                        damage = random.choice(list5) + random.choice(list5) + random.choice(list3) + 5
+                        if not (chancetomiss == 2):
+                            print("You take",damage,"damage.")
+                            health_number -= damage
+                            if health_number <= 0:
+                                print("With the last bit of your life drained out of your body, you fall\n to the ground in pain. The world slowly fades to black.")
+                                print("")
+                                print("Game Over")
+                                return
+                        else:
+                            print("You manage to dodge the attack. You take no damage")
+                if decision.lower() == "slingshot":
+                    damage = random.choice(list35) + random.choice(list35) + random.choice(list35) + random.choice(list35) +  2
+                    print("You attack the beast with your slingshot, dealing",damage,"damage.")
+                    enemy_health -= damage
+                    if enemy_health <= 0:
+                        print("The beast lets out a loud cry that slowly fades out.")
+                        print("You killed the beast!")
+                        enemy_defeated = "yes"
+                    else:
+                        print("The creature screams out in pain. You hear it lunge forward, attacking you")
+                        damage = random.choice(list5) + random.choice(list5) + random.choice(list3) + 5
+                        if not (chancetomiss == 2):
+                            print("You take",damage,"damage.")
+                            health_number -= damage
+                            if health_number <= 0:
+                                print("With the last bit of your life drained out of your body, you fall\n to the ground in pain. The world slowly fades to black.")
+                                print("")
+                                print("Game Over")
+                                return
+                        else:
+                            print("You manage to dodge the attack. You take no damage")
+                print("\nThe beast remains alive, with",enemy_health,"health remaining.\n")
+            elif decision.lower() == "inventory":
+                print("Weapons:")
+                if ("Spear" in inventory_items):
+                    print("Spear")
+                if ("Dagger" in inventory_items):
+                    print("Dagger")
+                if ("Slingshot" in inventory_items):
+                    print("Slingshot")
+                print("")
+                print("Current Health:",health_number,"HP")
+                for thing in inventory:
+                    for up in thing:
+                        if not ((thing == "Spear") or (thing == "Dagger") or (thing == "Slingshot")):
+                            print(up, end = "\t")
+                    if not ((thing == "Spear") or (thing == "Dagger") or (thing == "Slingshot")):
+                        print()
+                while not ((decision.lower() == "bandage") or (decision.lower() == "painkiller") or (decision.lower() == "cancel")):
+                    decision = input("What would you like to do? (Bandage / Painkiller / Cancel")
+                if decision.lower() == "bandage":
+                    if ("Bandage" in inventory_items):
+                        print("You use a Bandage.\n\nYou heal 10 HP.")
+                        health_number += 10
+                        if health_number > 100:
+                            health_number = 100
+                        inventory_items.remove("Bandage")
+                    else:
+                        print("You can't find a Bandage in your bag.")
+                        decision = "filler"
+                elif decision.lower() == "painkiller":
+                    if ("Painkiller" in inventory_items):
+                        print("You use a Painkiller.\n\nYou heal to full HP.")
+                        health_number = 100
+                        inventory_items.remove("Painkiller")
+                    else:
+                        print("You can't find a Painkiller in your bag.")
+                        decision = "filler"
+                elif decision.lower() == "cancel":
+                    decision = "cancel"
+        if health_number > 0:
+            print("\n\n\nYou walk through a hallway with stones all around. Eventually you\nsee a slight glimmer in the distance. As you approach\nyou notice the jewel, a mini sun glowing atop a purple rock.")
+            print("\nYou equipped The Jewel!")
+            print("\nYou walk back up the hallway and out the cave. You've slain the beast.\nYou walk out to a round of applause. Everyone cheers for you, the one who brought light back to the city.")
+            print("\n\n          You Win!")
+            return
+
+###############################################################################################################
+###############################################################################################################
+###############################################################################################################
+
+player = pllayout("filler",100,[],0,"alive",0,0)
+
+
+print("A plague of darkness has overtaken the city of Ashens. The bright sunlight that once \noccupied the entirety of the town has now vanished")
+
+print("Before you begin your adventure to save Ashens...")
+player.name = input("What is your name?")
+print("Well hello",player.name + ", lets begin the journey.")
+print("")
+print("You awaken to pitch black. You're room, which is usually lit up by the sun, is \ncompletely dark. You turn on the lights and go to the kitchen.")
+print("Looking around, you find yourself looking through the cabinets, searching \nfor anything to help you see.")
+print("")
+print("You find a Flashlight.")
+while not((flashlight.lower() == "yes") or (flashlight.lower() == "no")): #having the flashlight increases the odds of landing attacks
+    flashlight = input("Pick up the Flashlight? (Yes/No)")
+if flashlight == "yes":
+    print("You equip the Flashlight. Added to Inventory")
+    player.inventory.append("Flashlight")
+else:
+    print("You leave the Flashlight.")
+print("")
+print("You check the rest of the cabinets but to not avail.\nYou step outside, hoping to find others to talk to.")
+print("You see a circle of people surrounded by lit torches. They seem to be talking with each other.\nYou step closer and see a group of people, some of which you recognize.\nNamely the Mayor and Amanda, the owner of the Sacred Models shop.")
+#not allowed to continue until after you speak to the mayor. Afterwards the dungeon opens
+
+while player.status == "alive":
+    action = ""
+    if player.mayor_count == 0:
+        while not((action.lower() == "talk") or (action.lower() == "explore")):
+            action = input("What would you like to do? (Talk / Explore)")
+        if action.lower() == "talk":
+            while not ((action.lower() == "mayor") or (action.lower() == "shopkeeper")):
+                action = input("Who would you like to talk to? (Mayor / Shopkeeper)")
+                if action.lower() == "mayor":
+                    pllayout.mayor_talk(player)
+                    player.mayor_count += 1
+                elif action.lower() == "shopkeeper":
+                    pllayout.shopkeeper_talk(player)
+                    player.shop_keep += 1
+        elif action.lower() == "explore":
+            pllayout.exploration(player)
+            if health <= 0:
+                player.status = "dead"
+                print("")
+    elif player.mayor_count >= 1:
+        while not((action.lower() == "talk") or (action.lower() == "explore") or action.lower() == "inspect"):
+            action = input("What would you like to do? (Talk / Explore / Inspect)")
+        if action.lower() == "talk":
+            while not ((action.lower() == "mayor") or (action.lower() == "shopkeeper")):
+                action = input("Who would you like to talk to? (Mayor / Shopkeeper)")
+                if action.lower() == "mayor":
+                    pllayout.mayor_talk(player)
+                    player.mayor_count += 1
+                elif action.lower() == "shopkeeper":
+                    pllayout.shopkeeper_talk(player)
+                    player.shop_keep += 1
+        elif action.lower() == "explore":
+            pllayout.exploration(player)
+            if health <= 0:
+                player.status = "dead"
+                print("")
+        elif action.lower() == "inspect":
+            pllayout.dungeon(player)
+            if health > 0:
+                player.status = "win"
+            else:
+                player.status = "dead"
+                print("")
+#the "while" loop will only end once you either die, or defeat the enemy in the dungeon
